@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Bíblia RPG — A Bíblia que você vive</title>
+<meta name="description" content="Série interativa em pixel art: comente seu nome e o que quer ser, apareça nos episódios e viva no mundo bíblico.">
+<meta name="theme-color" content="#07080f">
+<meta property="og:title" content="Bíblia RPG — A Bíblia que você vive">
+<meta property="og:description" content="Comente seu nome e entre na história. Seu nome aparece nos vídeos e no mundo.">
+<meta property="og:image" content="img/bibliarpg-logo-1280.png">
+<link rel="icon" href="img/bibliarpg-perfil-1080.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07080f;--bg2:#0e1124;--line:#2b3160;--line2:#4a5294;--ouro:#ffd27a;--ouro2:#ffb238;--luz:#ffe9a8;--txt:#ecebf5;--mut:#a3a3c2;--terra:#3a2414}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--txt);font-family:'VT323',monospace;font-size:22px;line-height:1.3}
+a{color:inherit}
+.px{font-family:'Press Start 2P',monospace;letter-spacing:.5px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 18px}
+nav.top{position:sticky;top:0;z-index:20;background:rgba(7,8,15,.92);border-bottom:3px solid var(--line)}
+nav.top .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;gap:10px}
+nav.top .marca{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:11px;color:var(--ouro)}
+nav.top .marca img{width:32px;height:32px;image-rendering:pixelated}
+nav.top .links{display:flex;gap:16px;font-size:18px}
+nav.top .links a{text-decoration:none;color:var(--mut)}
+@media(max-width:640px){nav.top .links{display:none}nav.top .marca span{display:none}}
+.btn{display:inline-block;background:var(--ouro2);color:var(--terra);text-decoration:none;padding:13px 16px;font-family:'Press Start 2P';font-size:10px;box-shadow:inset -4px -4px 0 #a86a10,0 4px 0 #000;border:0;cursor:pointer}
+.btn:active{transform:translateY(2px)}
+.btn.ig{background:#c13584;color:#fff;box-shadow:inset -4px -4px 0 #7a1f53,0 4px 0 #000}
+.btn.yt{background:#d62a2a;color:#fff;box-shadow:inset -4px -4px 0 #861515,0 4px 0 #000}
+.hero{position:relative;overflow:hidden;border-bottom:4px solid #000}
+.hero canvas{display:block;width:100%;height:min(80vh,640px);image-rendering:pixelated}
+.hero .sobre{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;padding:7vh 18px 0;text-align:center;pointer-events:none;background:linear-gradient(rgba(7,8,15,.85),rgba(7,8,15,.3) 55%,rgba(7,8,15,0))}
+.hero h1{font-size:clamp(26px,6vw,56px);color:var(--ouro);text-shadow:4px 4px 0 #000;line-height:1.2}
+.hero .tag{font-size:clamp(22px,3.4vw,30px);margin:16px 0 6px;text-shadow:2px 2px 0 #000}
+.hero .sub{color:var(--luz);font-size:clamp(19px,2.8vw,24px);max-width:680px;text-shadow:2px 2px 0 #000}
+.hero .ctas{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px;pointer-events:auto}
+.hero .rodape{position:absolute;left:0;right:0;bottom:10px;text-align:center;color:var(--mut);font-size:18px;text-shadow:2px 2px 0 #000;pointer-events:none}
+section{padding:70px 0}
+section.alt{background:var(--bg2);border-top:4px solid #000;border-bottom:4px solid #000}
+h2{font-size:clamp(14px,2.4vw,20px);color:var(--ouro);line-height:1.6;margin-bottom:14px}
+.lead{color:var(--mut);max-width:760px;margin-bottom:30px}
+.passos{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.passo{background:#000;border:3px solid var(--line2);padding:18px;box-shadow:0 6px 0 #000}
+.passo .n{display:inline-block;background:var(--ouro2);color:var(--terra);font-size:12px;padding:8px 10px;margin-bottom:12px}
+.passo b{display:block;font-family:'Press Start 2P';font-size:10px;line-height:1.6;margin-bottom:8px;font-weight:normal}
+.passo p{color:var(--mut)}
+.coment{display:inline-block;background:#10132a;border:2px solid var(--line);padding:4px 10px;margin-top:8px;color:var(--luz)}
+.meta{display:grid;gap:18px;background:#000;border:3px solid var(--line2);padding:22px;box-shadow:0 6px 0 #000}
+.meta .lin{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.meta .dia{font-size:12px;color:var(--ouro)}
+.bar{height:18px;background:#1c1f36;border:3px solid #000;position:relative}.bar i{position:absolute;inset:0 auto 0 0;background:var(--ouro2);width:0;transition:width 1s steps(16)}
+.numeros{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:center}
+.numeros b{display:block;font-family:'Press Start 2P';font-size:clamp(16px,3vw,24px);color:var(--luz);font-weight:normal;margin-bottom:6px}
+.numeros span{color:var(--mut);font-size:18px}
+.cenas{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+.cena{background:#000;border:3px solid var(--line2);box-shadow:0 6px 0 #000;display:flex;flex-direction:column}
+.cena canvas{display:block;width:100%;image-rendering:pixelated;border-bottom:3px solid var(--line2)}
+.cena .c{padding:14px 16px 16px}
+.cena .st{font-family:'Press Start 2P';font-size:8px;color:var(--terra);background:var(--ouro2);padding:4px 6px;display:inline-block;margin-bottom:10px}
+.cena .st.breve{background:#1c2048;color:var(--mut)}
+.cena h3{font-family:'Press Start 2P';font-size:11px;color:var(--ouro);line-height:1.6;font-weight:normal}
+.cena .ref{color:var(--mut);font-size:18px;margin-bottom:8px}
+.cena .voce{color:var(--luz);margin-top:8px}
+.destaque{grid-column:1/-1}
+.trilha{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+.trilha span{background:#000;border:2px solid var(--line2);padding:6px 10px}
+.trilha .seta{border:0;background:none;color:var(--ouro);padding:0}
+.patro{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin:24px 0}
+.patro div{background:#000;border:3px dashed var(--ouro2);padding:16px}
+.patro b{display:block;font-family:'Press Start 2P';font-size:9px;color:var(--ouro);line-height:1.6;margin-bottom:8px;font-weight:normal}
+.patro p{color:var(--mut)}
+.final{text-align:center}
+.final .ctas{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:20px}
+footer{border-top:4px solid #000;background:#000;padding:26px 0 calc(26px + env(safe-area-inset-bottom));color:var(--mut);font-size:18px;text-align:center}
+footer a{color:var(--ouro)}
+</style>
+</head>
+<body>
+<nav class="top"><div class="wrap">
+  <a class="marca px" href="#"><img src="img/bibliarpg-perfil-1080.png" alt=""><span>BÍBLIA RPG</span></a>
+  <div class="links"><a href="#como">Como funciona</a><a href="#cenas">Cenas</a><a href="#anuncie">Anuncie</a></div>
+  <a class="btn" href="mundo/">ENTRAR NO MUNDO</a>
+</div></nav>
+
+<header class="hero">
+  <canvas id="heroCv"></canvas>
+  <div class="sobre">
+    <h1 class="px">BÍBLIA RPG</h1>
+    <p class="tag">A Bíblia que você vive.</p>
+    <p class="sub">Comente seu nome e entre na história. Você aparece nos episódios com seu nome sobre a cabeça e vive no mundo bíblico.</p>
+    <div class="ctas"><a class="btn" href="mundo/">ENTRAR NO MUNDO</a><a class="btn ig" href="https://instagram.com/bibliarpg" target="_blank" rel="noopener">INSTAGRAM</a><a class="btn yt" href="https://youtube.com/@bibliarpg" target="_blank" rel="noopener">YOUTUBE</a></div>
+  </div>
+  <div class="rodape" id="heroRod">o povo no deserto · prévia</div>
+</header>
+
+<section id="como"><div class="wrap">
+  <h2 class="px">NÃO É SÓ UM VÍDEO. É UM JOGO.</h2>
+  <p class="lead">O Bíblia RPG conta a Bíblia desde Gênesis em episódios curtos de pixel art. A diferença: quem segue vira personagem. Seu nome entra na história, aparece nos vídeos e fica vivo no mundo, cena após cena.</p>
+  <div class="passos">
+    <div class="passo"><span class="n px">1</span><b>SIGA O PERFIL</b><p>Siga @bibliarpg no Instagram ou se inscreva no YouTube.</p></div>
+    <div class="passo"><span class="n px">2</span><b>COMENTE NOME + O QUE QUER SER</b><p>No último episódio, diga quem você é na criação.</p><span class="coment">Diogo, águia 🦅</span></div>
+    <div class="passo"><span class="n px">3</span><b>APAREÇA NO PRÓXIMO EPISÓDIO</b><p>Seu nome aparece na cena, sobre a cabeça do seu personagem.</p></div>
+    <div class="passo"><span class="n px">4</span><b>VIVA NO MUNDO</b><p>Ache seu nome no mundo, veja sua trilha pelas cenas e baixe sua Carta para o story.</p></div>
+  </div>
+</div></section>
+
+<section class="alt" id="metas"><div class="wrap">
+  <h2 class="px">AS METAS LIBERAM A HISTÓRIA</h2>
+  <p class="lead">Cada meta de seguidores (Instagram + YouTube) libera um novo dia, uma nova cena e um novo episódio. Quanto mais gente entra, mais rápido a Bíblia avança.</p>
+  <div class="meta">
+    <div class="lin"><span class="dia px" id="mDia">DIA 1 · A LUZ</span><span id="mTxt">carregando…</span></div>
+    <div class="bar"><i id="mBar"></i></div>
+    <div class="numeros"><div><b id="nPessoas">0</b><span>no mundo</span></div><div><b id="nSeg">0</b><span>seguidores</span></div><div><b id="nMeta">50</b><span>próxima meta</span></div></div>
+  </div>
+</div></section>
+
+<section id="cenas"><div class="wrap">
+  <h2 class="px">AS CENAS QUE VÊM POR AÍ</h2>
+  <p class="lead">Você atravessa a Bíblia com todo mundo. Em cada cena, os seguidores aparecem juntos, cada um com o nome sobre a cabeça, no vídeo e no mundo.</p>
+  <div class="cenas" id="listaCenas"></div>
+  <p class="lead" id="aviso" style="margin-top:18px;font-size:18px"></p>
+</div></section>
+
+<section class="alt"><div class="wrap">
+  <h2 class="px">SUA HISTÓRIA ATRAVESSA A BÍBLIA</h2>
+  <p class="lead">Seu personagem guarda tudo o que você foi em cada episódio. No futuro, você vai poder andar com ele pelas cenas, ter sua tenda, sua casa e seu ofício.</p>
+  <div class="trilha"><span>Luz</span><span class="seta px">▶</span><span>Águia</span><span class="seta px">▶</span><span>Filho de Adão</span><span class="seta px">▶</span><span>Passageiro da Arca</span><span class="seta px">▶</span><span>Construtor em Babel</span><span class="seta px">▶</span><span>Peregrino no deserto</span></div>
+</div></section>
+
+<section id="anuncie"><div class="wrap">
+  <h2 class="px">SUA MARCA DENTRO DA HISTÓRIA</h2>
+  <p class="lead">Cada cena tem placas de patrocinador integradas ao cenário. Sua marca aparece no mundo e nos episódios assistidos por toda a comunidade.</p>
+  <div class="patro">
+    <div><b>NA ARCA DE NOÉ</b><p>Uma placa no casco da Arca, vista por todo mundo que embarca.</p></div>
+    <div><b>NA TORRE DE BABEL</b><p>Na caixa de tijolos dos construtores.</p></div>
+    <div><b>NO MONTE MORIÁ</b><p>Na lenha que Isaque carrega monte acima.</p></div>
+    <div><b>NO DESERTO</b><p>Nas tendas do povo, a caminho da terra prometida.</p></div>
+  </div>
+  <a class="btn" id="wa" target="_blank" rel="noopener">QUERO ANUNCIAR</a>
+</div></section>
+
+<section class="alt final"><div class="wrap">
+  <h2 class="px">A PRÓXIMA LUZ PODE SER VOCÊ</h2>
+  <p class="lead" style="margin:0 auto">Siga, comente seu nome e o que quer ser, e entre na história.</p>
+  <div class="ctas"><a class="btn" href="mundo/">ENTRAR NO MUNDO</a><a class="btn ig" href="https://instagram.com/bibliarpg" target="_blank" rel="noopener">@BIBLIARPG</a><a class="btn yt" href="https://youtube.com/@bibliarpg" target="_blank" rel="noopener">YOUTUBE</a></div>
+</div></section>
+
+<footer><div class="wrap">Bíblia RPG · uma criação <a href="https://www.ddsinovacao.com.br" target="_blank" rel="noopener">DDS Inovação</a></div></footer>
+
+<script src="cenas.js"></script>
+<script>
+const {CENAS,ALT,WA,desenhar}=BRPG;
+document.getElementById('wa').href=WA;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const DIAS=['','A LUZ','AS ÁGUAS','A TERRA','AS ESTRELAS','PEIXES E AVES','OS ANIMAIS','O DESCANSO'];
+let real={pessoas:[],estado:{dia:1,seguidores:0,meta:50}},pessoas=[];
+
+function rotulos(c,lug,cam,s,max,tipo,W){const cx=cam+W/2/s,ocup=[];c.setTransform(1,0,0,1,0,0);
+  const fs=Math.max(14,Math.round(s*5));
+  lug.filter(q=>q.x>cam&&q.x<cam+W/s).sort((a,b)=>Math.abs(a.x-cx)-Math.abs(b.x-cx)).slice(0,max).forEach(q=>{
+    const txt=q.p.nome+(tipo==='luzes'?' · '+q.p.escolha:'');c.font=fs+'px VT323';
+    const w=Math.ceil(c.measureText(txt).width)+8,h=fs;
+    const x=Math.round((q.x-cam)*s-w/2),y=Math.round(q.y*s-(tipo==='luzes'?5:14)*s-h);
+    if(ocup.some(r=>x<r[0]+r[2]&&x+w>r[0]&&y<r[1]+r[3]&&y+h>r[1]))return;ocup.push([x,y,w,h]);
+    c.fillStyle='rgba(4,5,11,.8)';c.fillRect(x,y,w,h);c.fillStyle='#ffe9a8';c.textAlign='left';c.fillText(txt,x+4,y+h-Math.round(fs*.22))})}
+function placas(c,k,cam,s){c.setTransform(1,0,0,1,0,0);(k.placas||[]).forEach(pl=>{const x=(pl.x-cam)*s,y=pl.y*s;c.fillStyle='#3a2414';c.font=Math.round(Math.min(pl.h*.8,10)*s)+'px VT323';c.textAlign='center';c.fillText('SEU ANÚNCIO',x+pl.w*s/2,y+pl.h*s*.75)})}
+
+/* hero: o povo no deserto, câmera passeando */
+const hero=document.getElementById('heroCv'),hc=hero.getContext('2d');
+function heroFrame(ms){const t=ms/1000,k=CENAS.find(x=>x.id==='deserto'),d=Math.min(2,devicePixelRatio||1);
+  const W=Math.round(hero.clientWidth*d),H=Math.round(hero.clientHeight*d);if(hero.width!==W)hero.width=W;if(hero.height!==H)hero.height=H;
+  const s=H/ALT,vis=W/s,meio=Math.max(0,(k.larg-vis)/2),cam=meio+Math.sin(t*.07)*meio;
+  hc.imageSmoothingEnabled=false;hc.setTransform(s,0,0,s,-cam*s,0);
+  const lug=desenhar(hc,k,t,pessoas,{});placas(hc,k,cam,s);rotulos(hc,lug,cam,s,16,k.tipo,W);requestAnimationFrame(heroFrame)}
+
+/* cards das cenas */
+function montarCenas(){const box=document.getElementById('listaCenas');
+  box.innerHTML=CENAS.map((k,i)=>'<article class="cena'+(k.id==='deserto'?' destaque':'')+'"><canvas data-i="'+i+'" width="'+(k.id==='deserto'?960:480)+'" height="288"></canvas><div class="c"><span class="st '+(k.status==='agora'?'':'breve')+'">'+(k.status==='agora'?'AGORA':'EM BREVE')+'</span><h3>'+esc(k.nome.toUpperCase())+'</h3><div class="ref">'+esc(k.ref)+'</div><p>'+esc(k.texto)+'</p><p class="voce">'+esc(k.voce)+'</p></div></article>').join('');
+  requestAnimationFrame(cards)}
+function cards(ms){const t=ms/1000;document.querySelectorAll('#listaCenas canvas').forEach(cv=>{
+    const r=cv.getBoundingClientRect();if(cv._ok&&(r.bottom<-50||r.top>innerHeight+50))return;cv._ok=1;
+    const k=CENAS[+cv.dataset.i],c=cv.getContext('2d'),s=cv.height/ALT,vis=cv.width/s;
+    const cam=Math.max(0,Math.min(k.larg-vis,(k.cam0||0)+128-vis/2));
+    c.imageSmoothingEnabled=false;c.setTransform(s,0,0,s,-cam*s,0);
+    const lug=desenhar(c,k,t,pessoas,{});placas(c,k,cam,s);rotulos(c,lug,cam,s,k.id==='deserto'?14:7,k.tipo,cv.width)});
+  requestAnimationFrame(cards)}
+
+async function iniciar(){try{real=await BRPG.carregar(false)}catch(e){}
+  const exemplo=(await BRPG.carregar(true)).pessoas,usaExemplo=real.pessoas.length<12;pessoas=usaExemplo?exemplo:real.pessoas;
+  document.getElementById('aviso').textContent=usaExemplo?'* As prévias usam nomes de exemplo até os primeiros seguidores entrarem. Depois, quem aparece aqui é você.':'';
+  document.getElementById('heroRod').textContent=usaExemplo?'o povo no deserto · prévia com nomes de exemplo':'o povo no deserto · com os nomes reais';
+  const e=real.estado;document.getElementById('mDia').textContent='DIA '+e.dia+' · '+(DIAS[e.dia]||'');
+  document.getElementById('nPessoas').textContent=real.pessoas.length;document.getElementById('nSeg').textContent=e.seguidores;document.getElementById('nMeta').textContent=e.meta;
+  document.getElementById('mBar').style.width=(e.meta?Math.min(100,Math.round(e.seguidores/e.meta*100)):0)+'%';
+  const f=Math.max(0,e.meta-e.seguidores);document.getElementById('mTxt').textContent=f>0?'faltam '+f+' seguidores para o Dia '+(e.dia+1):'meta batida: o próximo dia vem aí!'}
+montarCenas();requestAnimationFrame(heroFrame);iniciar();
+</script>
+</body>
+</html>
